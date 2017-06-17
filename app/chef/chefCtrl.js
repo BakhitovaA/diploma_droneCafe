@@ -22,7 +22,7 @@ angular
 
         socket.emit('status changed', order);
 
-        chefCtrlService.updateOrderStatus(order._id, order.status);
+        chefCtrlService.updateOrderStatus(order._id, order.status, order.price);
     };
     //переход к доставке заказа
     $scope.finish = function(order, orderIndex) {
@@ -31,7 +31,7 @@ angular
 
         socket.emit('status changed', order);
 
-        chefCtrlService.updateOrderStatus(order._id, order.status);
+        chefCtrlService.updateOrderStatus(order._id, order.status, order.price);
     };
 
     socket.on('order created', function(){
