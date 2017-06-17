@@ -1,0 +1,24 @@
+{
+    "name": "drone-cafe",
+    "version": "1.0.0",
+    "description": "Drone cafe on AngularJS",
+    "repository": "https://github.com/MorinaA/diploma_droneCafe",
+    "main": "server.js",
+    "author": "Anastasiya Morina",
+    "license": "ISC",
+    "scripts": {
+        "prestart": "npm install",    
+        "start": "node server.js",
+        "postinstall": "bower install"
+    },
+    "dependencies": {
+        "body-parser": "^1.15.2",
+        "http-server": "^0.9.0",
+        "bower": "^1.8.0",
+        "express": "^4.15.3",
+        "mongodb": "^2.2.19",
+        "mongoose": "^4.7.6",
+        "socket.io": "^1.7.2",
+        "netology-fake-drone-api": "^1.0.1"
+    }
+}
