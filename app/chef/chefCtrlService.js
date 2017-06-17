@@ -13,11 +13,11 @@ angular
             return $http.get('/api/orders', config);
         },
         //обновление статуса заказа
-        updateOrderStatus: function(orderid, newStatus){
+        updateOrderStatus: function(orderid, newStatus, orderPrice){
             let orderData = {
-                status: newStatus
+                status: newStatus,
+                price: orderPrice
             };
-
             return $http({
                 method: 'PUT',
                 url: '/api/orders/' + orderid,
