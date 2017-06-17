@@ -1,5 +1,3 @@
-//меню (будет) перенесено в БД 'mongodb://Anastasiya.Morina:qwerty@ds123312.mlab.com:23312/dronecafe'
-
 [
   {
     "title": "Cheese Popovers",
