@@ -91,8 +91,9 @@ angular
             for (let i=0; i<$scope.userOrder.length; i++){
                 if($scope.userOrder[i]._id == order._id){
                     $scope.userOrder[i].status = order.status;
+                    $scope.userOrder[i].price = order.price;
                     if ($scope.userOrder[i].status == 'Возникли сложности') {
-                        $scope.user.balance = $scope.user.balance + order.price;
+                        $scope.user.balance = $scope.user.balance + $scope.userOrder[i].price
                         clientCtrlService.updateUserBalance($scope.user._id, $scope.user.balance);
                     }
                     $scope.$apply();
