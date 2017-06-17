@@ -70,9 +70,10 @@ angular
             });
         },
         //обновление статуса заказа
-        updateOrderStatus: function(orderid, newStatus){
+        updateOrderStatus: function(orderid, newStatus, orderPrice){
             let orderInfo = {
-                status: newStatus
+                status: newStatus,
+                price: orderPrice
             };
             return $http({
                 method: 'PUT',
