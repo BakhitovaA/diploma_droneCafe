@@ -15,7 +15,8 @@ angular
         clientCtrlService.getUserInfo($scope.user).then(function(data) {
             if(data.data.length == 0) {
                 //создание нового клиента
-                $scope.user.balance = 100;                clientCtrlService.createNewUser($scope.user).then(function(data) {
+                $scope.user.balance = 100;                
+                clientCtrlService.createNewUser($scope.user).then(function(data) {
                     $scope.user = data.data;
                 });
             } else {
@@ -56,6 +57,7 @@ angular
     //добавление блюда к заказу со скидкой при неудачной доставке
     $scope.addMealToOrderWithSale = function(order, orderIndex){
         $scope.user.balance = $scope.user.balance - (order.price/100*5);
+        order.price = order.price/100*5;
         clientCtrlService.updateUserBalance($scope.user._id, $scope.user.balance);
         
         order.status = 'Заказано';
@@ -65,9 +67,13 @@ angular
     //удаление блюда из заказа
     $scope.deleteMealFromOrder = function(order, orderIndex){     
         $scope.user.balance = $scope.user.balance + order.price;
-
         clientCtrlService.updateUserBalance($scope.user._id, $scope.user.balance);
         
+        clientCtrlService.deleteOrder(order._id);
+        $scope.userOrder.splice(orderIndex, 1);
+    };
+    //отмена заказа после неуспешной доставки
+    $scope.orderCancellation = function(order, orderIndex){
         clientCtrlService.deleteOrder(order._id);
         $scope.userOrder.splice(orderIndex, 1);
     };
@@ -85,6 +91,10 @@ angular
             for (let i=0; i<$scope.userOrder.length; i++){
                 if($scope.userOrder[i]._id == order._id){
                     $scope.userOrder[i].status = order.status;
+                    if ($scope.userOrder[i].status == 'Возникли сложности') {
+                        $scope.user.balance = $scope.user.balance + order.price;
+                        clientCtrlService.updateUserBalance($scope.user._id, $scope.user.balance);
+                    }
                     $scope.$apply();
                     break;
                 }
