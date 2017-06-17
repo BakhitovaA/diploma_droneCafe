@@ -1,0 +1,117 @@
+<style>
+    body {
+		background: #FFEBCD;
+    }
+    label {
+		font-size: 14pt; 
+	}
+    div.left_block {
+        float:left;
+        width:50%;
+    }
+    div.right_block {
+        float:right;
+        width:30%;
+    }
+    .ng-dirty.ng-invalid {
+        border-color: #FA787E;
+    }
+    .ng-dirty.ng-valid {
+        border-color: #78FA89;
+    }
+    .modal-content {
+        overflow: auto;
+        width: 1200px;
+        height: 700px;
+    }
+</style>
+
+<div class="page" data-ng-class="{'page--main': !userLogin}">
+
+    <div class="container center" data-ng-if="!userLogin">
+        <h1 class="header center teal-text text-lighten-2 mainpage__headline">Вход в Drone Cafe!</h1>
+        
+        <form name="myAccountForm" class="col s12" novalidate>
+
+        <div class="form-group">
+            <label>Имя</label>
+            <input class="form-control" data-ng-model="account.name" type="text" placeholder="Имя" required name="accountName">
+        </div>
+
+        <div role="alert" ng-messages="myAccountForm.accountName.$error" ng-if="myAccountForm.accountName.$dirty">
+            <div ng-message="required" class="alert alert-danger">Поле "Имя" обязательно для заполнения</div>
+        </div>
+        
+        <div class="form-group">
+            <label>Электронная почта</label>
+            <input class="form-control" data-ng-model="account.email" type="text" placeholder="Email" data-ng-pattern="/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/" required name="accountEmail">
+        </div>
+
+        <div ng-messages="myAccountForm.accountEmail.$error" ng-if="myAccountForm.accountEmail.$dirty">
+            <div ng-message="pattern" class="alert alert-danger">Не верный e-mail</div>
+            <div ng-message="required" class="alert alert-danger" role="alert">Поле "E-mail" обязательно для заполнения</div>
+        </div>
+       
+        <button type="submit" class="waves-effect waves-light btn" ng-click="accountData(account)" data-ng-disabled="myAccountForm.$invalid">Вход</button>
+         
+        </form>      
+    </div>
+  
+  
+    <div class="container" data-ng-if="userLogin">
+       
+        <div class="left_block" data-ng-if="!menuListDisplay">
+            <h5><u>Список заказанных блюд</u></h5>
+            <div class="list-group">
+                <div class="list-group-item" data-ng-repeat="singleMeal in userOrder">
+                    <label class="list-group-item-heading">{{singleMeal.mealName}}</label>
+                    <span align="right">{{singleMeal.status}}</span>
+                    <button ng-click="deleteMealFromOrder(singleMeal, $index)" data-ng-if="singleMeal.status == 'Заказано'">Отменить</button>
+                    <button ng-click="deleteMealFromOrder(singleMeal, $index)" data-ng-if="singleMeal.status == 'Возникли сложности'">Отменить заказ</button>
+                    <button ng-click="addMealToOrderWithSale(singleMeal, $index)" data-ng-if="singleMeal.status == 'Возникли сложности'">Повторить со скидкой 5%</button>
+                </div>
+            </div>
+            <button class="waves-effect waves-light btn" data-ng-click="openMenu()">Добавить блюдо к заказу</button>
+        </div>
+       
+        <div class="content" data-ng-if="menuListDisplay">
+            <div class="modal-content">
+               <button class="waves-effect waves-light btn" data-ng-click="closeMenu()">Оформить заказ</button>
+                <h4>Меню:</h4> 
+                <ul class="list-group">
+                <div class="list-group-item" data-ng-repeat="singleMeal in meals">
+                   <h5 class="list-group-item">
+                        <a>{{singleMeal.title}}</a>
+                    </h5>
+                    <p class="list-group-item-text">
+                        Цена: {{singleMeal.price}}
+                    </p>                       
+                    <button data-ng-if="singleMeal.price <= user.balance" ng-click="addMealToOrder(singleMeal._id, singleMeal.title, singleMeal.price)">Заказать</button>
+                    <p class="list-group-item-text" data-ng-if="singleMeal.price > user.balance">
+                        Недостаточно средств. Пополните баланс на  {{singleMeal.price - user.balance}} Галактических кредитов
+                    </p>
+                </div>
+                </ul> 
+            </div> 
+        </div>
+        
+        <div class="right_block" data-ng-if="!menuListDisplay"> 
+            <div class="col l4 offset-l2 s12">
+                <h5><u>Информация об аккаунте</u></h5>
+            </div>
+            <div class="form-group">
+                <label>Имя: </label>
+                <span>{{ user.name }}</span>
+            </div>
+            <div class="form-group">
+                <label>Баланс:</label>
+                <span>{{ user.balance }}</span>         
+            </div>
+            <button type="submit" class="btn btn-default" data-ng-click="addAmount()">Пополнить счет</button>
+        </div>
+        
+    </div>
+       
+
+</div>
+       
