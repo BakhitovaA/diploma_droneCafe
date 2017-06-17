@@ -62,7 +62,7 @@ angular
         
         order.status = 'Заказано';
         socket.emit('order status changed', order);
-        clientCtrlService.updateOrderStatus(order._id, order.status);
+        clientCtrlService.updateOrderStatus(order._id, order.status, order.price);
     };
     //удаление блюда из заказа
     $scope.deleteMealFromOrder = function(order, orderIndex){     
@@ -91,11 +91,7 @@ angular
             for (let i=0; i<$scope.userOrder.length; i++){
                 if($scope.userOrder[i]._id == order._id){
                     $scope.userOrder[i].status = order.status;
-                    console.log($scope.userOrder[i].status);
-                    
                     $scope.userOrder[i].price = order.price;
-                    console.log($scope.userOrder[i].price)
-                    
                     if ($scope.userOrder[i].status == 'Возникли сложности') {
                         $scope.user.balance = $scope.user.balance + $scope.userOrder[i].price
                         clientCtrlService.updateUserBalance($scope.user._id, $scope.user.balance);
