@@ -30,7 +30,7 @@ db.once('open', function() {
 	console.log('Подключение к БД: ', 'mongodb://Anastasiya.Morina:qwerty@ds123312.mlab.com:23312/dronecafe');
     
 	APIv1.route('/clients')
-        	//получение информации о клиенте
+        //получение информации о клиенте
 		.get((req, res) => {
 			model.Client.find({name : req.query.name, email : req.query.email}, (err, client) => {
 				if (err){
@@ -40,7 +40,7 @@ db.once('open', function() {
 				};
 			});
 		})
-        	//создание нового клиента
+        //создание нового клиента
 		.post((req, res) => {
 			const client = new model.Client({name : req.body.name, email : req.body.email, balance : 100});
 			client.save((err) => {
@@ -53,7 +53,7 @@ db.once('open', function() {
 		});
 
 	APIv1.route('/clients/:client_id')
-        	//обновление баланса клиента
+        //обновление баланса клиента
 		.put((req, res) => {
 			model.Client.findById(req.params.client_id, (err, client) => {
 				  if (err) {
@@ -122,23 +122,25 @@ db.once('open', function() {
                         res.json(orders);
                     };
                 });
-    	})
+                
+		})
+        
         //добавление блюда к заказу
-	.post((req, res) => {
-		const newOrder = new model.Order({
-			userId : mongoose.Types.ObjectId(req.body.userId), 
-			mealId : mongoose.Types.ObjectId(req.body.mealId), 
-			status : 'Заказано'
+		.post((req, res) => {
+			const newOrder = new model.Order({
+                userId : mongoose.Types.ObjectId(req.body.userId), 
+                mealId : mongoose.Types.ObjectId(req.body.mealId), 
+                status : 'Заказано'
+            });
+			newOrder.save((err) => {
+				if (err) {
+					res.send(err);
+				} else {
+                    res.send('Заказ создан');
+                    io.emit('order created');
+				}
+			});
 		});
-		newOrder.save((err) => {
-			if (err) {
-				res.send(err);
-			} else {
-			    	res.send('Заказ создан');
-			    	io.emit('order created');
-			}
-		});
-	});
 
 	APIv1.route('/orders/:order_id')
         //обновление статуса заказа
@@ -148,6 +150,8 @@ db.once('open', function() {
                     res.send(err);
                 } else {
                     order.status = req.body.status;
+                    order.price = req.body.price;
+                    let amount = order.price
                     order.save((err) => {
                         if (err) {
                             res.send(err);
@@ -160,6 +164,7 @@ db.once('open', function() {
                                     .deliver()
                                     .then(() => {
                                         order.status = 'Подано';
+                                        order.price = amount;
                                         order.save((err) => {
                                             if (err) {
                                                 console.log(err);
@@ -204,17 +209,17 @@ db.once('open', function() {
                     });
                 };
             });
-	})
+		})
         //удаление блюда из заказа
-	.delete((req, res) => {
-		model.Order.remove({_id: req.params.order_id}, (err) => {
-			if (err) {
-			    res.send(err);
-			} else {
-			    res.send('Заказ удален')
-			};
-	    	});
-	});
+		.delete((req, res) => {
+			model.Order.remove({_id: req.params.order_id}, (err) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send('Заказ удален')
+                };
+            });
+	   });
 })
 
 app.use('/api', APIv1);
