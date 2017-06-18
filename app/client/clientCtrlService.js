@@ -62,7 +62,7 @@ angular
                 data: orderInfo
             });
         },
-        //удаление блюда из заказа (в разработке)
+        //удаление блюда из заказа
         deleteOrder: function(orderid){
             return $http({
                 method: 'DELETE',
