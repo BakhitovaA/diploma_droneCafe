@@ -110,7 +110,7 @@
                                 <p>Рейтинг: {{singleMeal.rating}}</p>
                                 <span>Ингредиенты:</span>
                                 <p>{{singleMeal.ingredients}}</p>
-                                <p>Цена: {{singleMeal.price}}</p>
+                                <p><b>Цена: {{singleMeal.price}}<b></p>
                             </div>
                             <div class="card-action">
                                 <button class="waves-effect waves-light btn" data-ng-if="singleMeal.price <= user.balance" ng-click="addMealToOrder(singleMeal._id, singleMeal.title, singleMeal.price)">Заказать</button>
