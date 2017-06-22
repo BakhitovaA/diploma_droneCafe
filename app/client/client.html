@@ -25,7 +25,7 @@
     }
     .modal-content {
         overflow: auto;
-        width: 90%;
+        width: 100%;
         background: #FFDAB9;
     }
 </style>
@@ -99,7 +99,7 @@
         <div class="content center" data-ng-if="menuListDisplay">
             <div class="modal-content">
                 <div class="col s12 m7">
-                    <h4>Меню:</h4>
+                    <h4>Меню</h4>
                     <div class="card horizontal" data-ng-repeat="singleMeal in meals">
                         <div class="card-image">
                             <img data-ng-src="{{singleMeal.image}}">
