@@ -9,7 +9,8 @@
     "scripts": {
         "prestart": "npm install",    
         "start": "node server.js",
-        "postinstall": "bower install"
+        "postinstall": "bower install",
+        "test": "mocha"
     },
     "dependencies": {
         "body-parser": "^1.15.2",
@@ -20,5 +21,10 @@
         "mongoose": "^4.7.6",
         "socket.io": "^1.7.2",
         "netology-fake-drone-api": "^1.0.1"
+    },
+    "devDependencies": {
+        "chai": "^4.0.0",
+        "mocha": "^3.4.2",
+        "supertest": "^3.0.0"
     }
 }
